@@ -1,5 +1,5 @@
 FROM legendary/ubuntu-core
-MAINTAINER Kevin Nordloh <mail@legendary-server.de>
+MAINTAINER Prime-Host <info@nordloh-webdesign.de>
 
 RUN apt-get update
 RUN apt-get -y upgrade
