@@ -43,4 +43,4 @@ RUN chmod 755 /nginx-start.sh
 EXPOSE 80
 EXPOSE 9011
 
-CMD ["/bin/bash", "/start.sh"]
+CMD ["/bin/bash", "/nginx-start.sh"]
