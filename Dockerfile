@@ -25,7 +25,7 @@ RUN sed -i -e "s/user\s*=\s*www-data/user = www-data/g" /etc/php/7.0/fpm/pool.d/
 # replace # by ; RUN find /etc/php/7.0/mods-available/tmp -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;
 
 # nginx site conf
-ADD ./nginx-site.conf /etc/nginx/sites-available/defaul
+ADD ./nginx-site.conf /etc/nginx/sites-available/default
 
 # Supervisor Config
 RUN /usr/bin/easy_install supervisor
