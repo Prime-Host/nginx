@@ -37,6 +37,10 @@ ADD ./supervisord.conf /etc/supervisord.conf
 # clean up unneeded packages
 RUN apt-get --purge autoremove -y
 
+# info php
+RUN mkdir /usr/share/nginx/www
+ADD ./index.php /usr/share/nginx/www/index.php
+
 # Startup Script
 ADD ./nginx-start.sh /nginx-start.sh
 RUN chmod 755 /nginx-start.sh
