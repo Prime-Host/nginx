@@ -42,6 +42,5 @@ RUN chmod 755 /nginx-start.sh
 
 #NETWORK PORTS
 EXPOSE 80
-EXPOSE 9011
 
 CMD ["/bin/bash", "/nginx-start.sh"]
