@@ -9,5 +9,9 @@ useradd -m -d /home/$PRIMEHOST_USER -G root -s /bin/bash $PRIMEHOST_USER \
 echo "$PRIMEHOST_USER:$PRIMEHOST_PASSWORD" | chpasswd
 echo "root:$PRIMEHOST_PASSWORD" | chpasswd
 
+# Create www folder and index.php
+mkdir /usr/share/nginx/www
+mv /index.php /usr/share/nginx/www/index.php
+
 # start all the services
 /usr/local/bin/supervisord -n -c /etc/supervisord.conf

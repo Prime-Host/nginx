@@ -33,8 +33,7 @@ ADD ./supervisord.conf /etc/supervisord.conf
 RUN apt-get --purge autoremove -y
 
 # info php
-RUN mkdir /usr/share/nginx/www
-ADD ./index.php /usr/share/nginx/www/index.php
+ADD ./index.php /index.php
 
 # Startup Script
 ADD ./nginx-start.sh /nginx-start.sh
