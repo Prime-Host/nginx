@@ -9,7 +9,9 @@ useradd -m -d /home/$PRIMEHOST_USER -G root -s /bin/bash $PRIMEHOST_USER \
 echo "$PRIMEHOST_USER:$PRIMEHOST_PASSWORD" | chpasswd
 echo "root:$PRIMEHOST_PASSWORD" | chpasswd
 
-sed -i -e "s/user\s*=\s*$PRIMEHOST_USER/user = $PRIMEHOST_USER/g" /etc/php/7.0/fpm/pool.d/www.conf
+# Custom user for nginx and php
+sed -i s/www-data/$PRIMEHOST_USER/g /etc/nginx/nginx.conf
+sed -i s/www-data/$PRIMEHOST_USER/g /etc/php/7.0/fpm/pool.d/www.conf
 
 # Create www folder and index.php
 mkdir /usr/share/nginx/www
