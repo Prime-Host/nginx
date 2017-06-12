@@ -18,7 +18,6 @@ RUN sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 10G/g" /etc/
 RUN sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 10G/g" /etc/php/7.0/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
-RUN sed -i -e "s/user\s*=\s*www-data/user = www-data/g" /etc/php/7.0/fpm/pool.d/www.conf
 
 # nginx site conf
 ADD ./nginx-main.conf /etc/nginx/nginx.conf
