@@ -16,6 +16,7 @@ sed -i s/www-data/$PRIMEHOST_USER/g /etc/php/7.0/fpm/pool.d/www.conf
 # Create www folder and index.php
 mkdir /usr/share/nginx/www
 mv /index.php /usr/share/nginx/www/index.php
+chown -R $PRIMEHOST_USER:$PRIMEHOST_USER /usr/share/nginx/www
 
 # start all the services
 /usr/local/bin/supervisord -n -c /etc/supervisord.conf
