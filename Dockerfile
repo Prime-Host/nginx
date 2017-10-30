@@ -42,10 +42,10 @@ RUN apt-get --purge autoremove -y
 ADD ./index.php /index.php
 
 # Startup Script
-ADD ./nginx-start.sh /nginx-start.sh
-RUN chmod 755 /nginx-start.sh
+ADD ./nginx-start.sh /root/container-scripts/prime-host/nginx-start.sh
+RUN chmod 755 /root/container-scripts/prime-host/nginx-start.sh
 
 #NETWORK PORTS
 EXPOSE 80
 
-CMD ["/bin/bash", "/nginx-start.sh"]
+CMD ["/bin/bash", "/root/container-scripts/prime-host/nginx-start.sh"]
