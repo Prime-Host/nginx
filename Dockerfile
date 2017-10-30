@@ -38,8 +38,10 @@ ADD ./supervisord.conf /etc/supervisord.conf
 # clean up unneeded packages
 RUN apt-get --purge autoremove -y
 
-# info php
-ADD ./index.php /index.php
+# Create www folder and index.php
+RUN mkdir /usr/share/nginx/www
+ADD ./index.php /usr/share/nginx/www/index.php
+RUN chown -R $PRIMEHOST_USER:$PRIMEHOST_USER /usr/share/nginx/www
 
 # Startup Script
 ADD ./nginx-start.sh /root/container-scripts/prime-host/nginx-start.sh
