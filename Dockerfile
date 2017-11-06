@@ -17,6 +17,9 @@ RUN apt-get -y install php-imagick php-imap php-mcrypt php-memcache php-apcu php
 RUN sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 10G/g" /etc/php/7.0/fpm/php.ini
 RUN sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 10G/g" /etc/php/7.0/fpm/php.ini
 RUN sed -i -e "s/memory_limit\s*=\s*128M/memory_limit = 1G/g" /etc/php/7.0/fpm/php.ini
+RUN sed -i -e "s/max_execution_time\s*=\s*30/max_execution_time = 300/g" /etc/php/7.0/fpm/php.ini
+RUN sed -i -e "s/max_input_time\s*=\s*60/max_input_time = 600/g" /etc/php/7.0/fpm/php.ini
+RUN sed -i -e "s/; max_input_vars\s*=\s*1000/max_input_vars = 100000/g" /etc/php/7.0/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i "/memory_limit/d" /etc/php/7.0/fpm/pool.d/www.conf
