@@ -31,8 +31,8 @@ ADD ./nginx-main.conf /etc/nginx/nginx.conf
 ADD ./nginx-default.conf /etc/nginx/sites-available/default
 
 # Supervisor Config
-RUN /usr/bin/easy_install supervisor
-RUN /usr/bin/easy_install supervisor-stdout
+#RUN /usr/bin/easy_install supervisor
+#RUN /usr/bin/easy_install supervisor-stdout
 ADD ./supervisord.conf /etc/supervisord.conf
 
 # clean up unneeded packages
@@ -47,8 +47,5 @@ RUN chown -R $PRIMEHOST_USER:$PRIMEHOST_USER /usr/share/nginx/www \
 # Startup Script
 ADD ./nginx-start.sh /root/container-scripts/prime-host/nginx-start.sh
 RUN chmod 755 /root/container-scripts/prime-host/nginx-start.sh
-
-#NETWORK PORTS
-EXPOSE 80
 
 CMD ["/bin/bash", "/root/container-scripts/prime-host/nginx-start.sh"]
