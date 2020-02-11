@@ -13,7 +13,6 @@ RUN apt-get update \
 ADD ./nginx-main.conf /etc/nginx/nginx.conf
 ADD ./nginx-default.conf /etc/nginx/sites-available/default
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD ./index.php /var/www/html/index.php
 ADD ./nginx-start.sh /bin/prime-host/nginx-start.sh
 
 EXPOSE 80
