@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: primehost/nginx:18.04
+    container_name: ${P_DOMAIN}-nginx
+    volumes:
+      - /var/docker/container/${P_DOMAIN}/html:/var/www/html
+    environment:
+      PRIMEHOST_USER: ${P_USER}
+      PRIMEHOST_PASSWORD: ${P_PASSWORD}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${P_ROUTER}.tls.certresolver=le
+      - traefik.http.routers.${P_ROUTER}.entrypoints=websecure
+      - traefik.http.services.${P_ROUTER}.loadbalancer.server.port=80
+      - traefik.http.routers.${P_ROUTER}.rule=Host(`${P_DOMAIN}`)
+
+  php:
+    image: php:${P_PHP}
+    container_name: ${P_DOMAIN}-php
+    volumes:
+      - /var/docker/container/${P_DOMAIN}/html:/var/www/html
+
+networks:
+  default:
+    external:
+      name: web
