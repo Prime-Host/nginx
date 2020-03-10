@@ -19,6 +19,7 @@ if [ ! -f /home/$PRIMEHOST_USER ]; then
 
   # Custom user for nginx 
   sed -i s/www-data/$PRIMEHOST_USER/g /etc/nginx/nginx.conf
+  sed -i s/localhost/$PRIMEHOST_DOMAIN-php/g /etc/nginx/nginx.conf
   chown -R ${PRIMEHOST_USER}:${PRIMEHOST_USER} /var/www/html
 fi
 
