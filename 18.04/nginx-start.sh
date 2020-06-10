@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Create index.php only if there is none
-if [ ! -f /var/www/html/index.php ]; then
-  echo "<?PHP
-  phpinfo();" >> /var/www/html/index.php
-fi
-
 # make all user changes only on first creation or if the user changed
 if [ ! -f /home/$PRIMEHOST_USER ]; then
   # Create custom ssh_user with sudo privileges
