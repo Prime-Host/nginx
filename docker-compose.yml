@@ -9,8 +9,8 @@ services:
      ports:
        - "${P_PORT}:22"
      volumes:
-       - /var/docker/container/${P_DOMAIN}/nginx/home:/home
-       - /var/docker/container/${P_DOMAIN}/nginx/html:/var/www/html
+       - /var/docker-data/container/${P_DOMAIN}/nginx/home:/home
+       - /var/docker-data/container/${P_DOMAIN}/nginx/html:/var/www/html
      environment:
        PRIMEHOST_USER: ${P_USER}
        PRIMEHOST_PASSWORD: ${P_PASSWORD}
