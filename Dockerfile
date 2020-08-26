@@ -5,7 +5,7 @@ RUN mkdir /var/run/sshd \
  && mkdir -p /var/www/html \
  && sed -i s:/usr/share/nginx/html:/var/www/html:g /etc/nginx/conf.d/default.conf \
  && apt-get update \
- && apt-get install -y cron python-setuptools supervisor wget curl git nano vim sudo unzip openssh-server openssl zsh \
+ && apt-get install -y cron python-setuptools supervisor wget curl git nano vim sudo unzip openssh-server openssl rsync zsh \
  && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
  && cp /root/.oh-my-zsh/themes/bira.zsh-theme /root/.oh-my-zsh/themes/prime-host.zsh-theme \
  && sed -i 's/%m/%M/g' /root/.oh-my-zsh/themes/prime-host.zsh-theme \
