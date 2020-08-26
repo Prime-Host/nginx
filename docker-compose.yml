@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+   nginx:
+     image: primehost/nginx
+     container_name: ${P_DOMAIN}-nginx
+     hostname: ${P_DOMAIN}
+     restart: always
+     ports:
+       - "${P_PORT}:22"
+     volumes:
+       - /var/docker/container/${P_DOMAIN}/nginx/home:/home
+       - /var/docker/container/${P_DOMAIN}/nginx/html:/var/www/html
+     environment:
+       PRIMEHOST_USER: ${P_USER}
+       PRIMEHOST_PASSWORD: ${P_PASSWORD}
+       PRIMEHOST_DOMAIN: ${P_DOMAIN}
+       GIT_ASKPASS: echo
+       TZ: "Europe/Berlin"
+     labels:
+      - traefik.enable=true
+      - traefik.http.routers.${P_ROUTER}.tls.certresolver=le
+      - traefik.http.routers.${P_ROUTER}.entrypoints=websecure
+      - traefik.http.services.${P_ROUTER}.loadbalancer.server.port=80
+      - traefik.http.routers.${P_ROUTER}.rule=Host(`${P_DOMAIN}`)
+      #- traefik.http.routers.${P_ROUTER}.rule=Host(`${P_DOMAIN}`) || Host(`${P_EXTRA_DOMAIN}`)
+
+networks:
+    default:
+       external:
+         name: web
+

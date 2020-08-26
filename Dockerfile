@@ -1,51 +1,32 @@
-FROM primehost/ubuntu-core
-MAINTAINER Prime-Host <info@nordloh-webdesign.de>
+FROM nginx:latest
+MAINTAINER Nordloh Webdesign <info@nordloh-webdesign.de>
 
-# php directory
-RUN mkdir /run/php
+RUN mkdir /var/run/sshd \
+ && mkdir -p /var/www/html \
+ && sed -i s:/usr/share/nginx/html:/var/www/html:g /etc/nginx/conf.d/default.conf \
+ && apt-get update \
+ && apt-get install -y cron python-setuptools supervisor wget curl git nano vim sudo unzip openssh-server openssl zsh \
+ && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
+ && cp /root/.oh-my-zsh/themes/bira.zsh-theme /root/.oh-my-zsh/themes/prime-host.zsh-theme \
+ && sed -i 's/%m/%M/g' /root/.oh-my-zsh/themes/prime-host.zsh-theme \
+ && sed -i s:/root/.oh-my-zsh:\$HOME/.oh-my-zsh:g /root/.zshrc \
+ && sed -i 's/robbyrussell/prime-host/g' /root/.zshrc \
+ && echo "DISABLE_UPDATE_PROMPT=true" >> /root/.zshrc \
+ && echo "cd /var/www/html" >> /root/.zshrc \
+ && echo "set encoding=utf-8" >> /root/.vimrc \
+ && echo "set fileencoding=utf-8" >> /root/.vimrc \
+ && cp -r /root/.oh-my-zsh /etc/skel/. \
+ && cp /root/.zshrc /etc/skel/. \
+ && cp /root/.vimrc /etc/skel/. 
 
-# install nginx and php
-RUN apt-get update \
- && apt-get -y install mysql-client nginx php-fpm php-mysql \
- && apt-get -y install php-xml php-mbstring php-bcmath php-zip php-pdo-mysql php-curl php-gd php-intl php-pear \
- && apt-get -y install php-imagick php-imap php-mcrypt php-memcache php-apcu php-pspell php-recode php-tidy php-xmlrpc
+# Add config files
+ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD ./start.sh /bin/prime-host/start.sh
+ADD ./nginx.conf /etc/nginx/nginx.conf
 
-# php-fpm config
-RUN sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 10G/g" /etc/php/7.0/fpm/php.ini \
- && sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 10G/g" /etc/php/7.0/fpm/php.ini \
- && sed -i -e "s/memory_limit\s*=\s*128M/memory_limit = 1G/g" /etc/php/7.0/fpm/php.ini \
- && sed -i -e "s/max_execution_time\s*=\s*30/max_execution_time = 300/g" /etc/php/7.0/fpm/php.ini \
- && sed -i -e "s/max_input_time\s*=\s*60/max_input_time = 600/g" /etc/php/7.0/fpm/php.ini \
- && sed -i -e "s/; max_input_vars\s*=\s*1000/max_input_vars = 100000/g" /etc/php/7.0/fpm/php.ini \
- && sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf \
- && sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf \
- && sed -i "/memory_limit/d" /etc/php/7.0/fpm/pool.d/www.conf \
- && echo "php_admin_value[memory_limit] = 1G" >> /etc/php/7.0/fpm/pool.d/www.conf \
- && echo "php_admin_value[post_max_size] = 10G" >> /etc/php/7.0/fpm/pool.d/www.conf \
- && echo "php_admin_value[max_execution_time] = 300" >> /etc/php/7.0/fpm/pool.d/www.conf \
- && echo "php_admin_value[upload_max_filesize] = 10G" >> /etc/php/7.0/fpm/pool.d/www.conf \
- && echo "php_admin_value[max_input_time] = 600" >> /etc/php/7.0/fpm/pool.d/www.conf \
+# network ports
+EXPOSE 22
 
-# nginx site conf
-ADD ./nginx-main.conf /etc/nginx/nginx.conf
-ADD ./nginx-default.conf /etc/nginx/sites-available/default
+WORKDIR /var/www/html
 
-# Supervisor Config
-#RUN /usr/bin/easy_install supervisor
-#RUN /usr/bin/easy_install supervisor-stdout
-ADD ./supervisord.conf /etc/supervisord.conf
-
-# clean up unneeded packages
-RUN apt-get --purge autoremove -y
-
-# Create www folder and index.php
-RUN mkdir /usr/share/nginx/www
-ADD ./index.php /usr/share/nginx/www/index.php
-RUN chown -R $PRIMEHOST_USER:$PRIMEHOST_USER /usr/share/nginx/www \
- && echo "cd /usr/share/nginx/www" >> /root/.zshrc
-
-# Startup Script
-ADD ./nginx-start.sh /root/container-scripts/prime-host/nginx-start.sh
-RUN chmod 755 /root/container-scripts/prime-host/nginx-start.sh
-
-CMD ["/bin/bash", "/root/container-scripts/prime-host/nginx-start.sh"]
+CMD ["/bin/bash", "/bin/prime-host/start.sh"]
